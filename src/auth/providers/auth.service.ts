@@ -9,7 +9,7 @@ export class AuthService {
     ) { }
 
     public login(email: string, password: string, id: string) {
-        const user = this.usersService.findOneById('1234')
+        const user = this.usersService.findOneById(1)
         return 'SAMPLE_TOKEN'
     }
 

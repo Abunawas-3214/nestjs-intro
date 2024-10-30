@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsISO8601, IsJSON, IsNotEmpty, IsOptional, IsString, IsUrl, Matches, MaxLength, MinLength, ValidateNested } from "class-validator"
+import { IsArray, IsEnum, IsIn, IsInt, IsISO8601, IsJSON, IsNotEmpty, IsOptional, IsString, IsUrl, Matches, MaxLength, MinLength, ValidateNested } from "class-validator"
 import { postStatus } from "../enums/postStatus.enum"
 import { postType } from "../enums/postType.enum"
 import { CreatePostMetaOptionsDto } from "../../meta-options/dtos/create-post-meta-options.dto"
@@ -80,37 +80,39 @@ export class CreatePostDto {
     publishOn?: Date
 
     @ApiPropertyOptional({
-        description: "Array of tags passed as string values",
-        example: ["javascript", "typescript", "nestjs"]
+        description: "Array of ids of tags",
+        example: [1, 2]
     })
     @IsOptional()
     @IsArray()
-    @IsString({ each: true })
-    @MinLength(3, { each: true })
-    tags?: string[]
+    @IsInt({ each: true })
+    tags?: number[]
 
     @ApiPropertyOptional({
-        type: 'array',
+        type: 'object',
         required: false,
         items: {
             type: 'object',
             properties: {
-                key: {
-                    type: 'string',
-                    description: "The key can be any string indentifier for your meta option",
-                    example: 'sidebarEnabled'
-                },
-                value: {
-                    type: 'any',
-                    description: "Any value that you want to save to the key",
-                    example: true
+                metaValue: {
+                    type: 'json',
+                    description: 'The meta value is a JSON string',
+                    example: '{"sidebarEnabled": true}',
                 }
             }
         },
     })
     @IsOptional()
-    @IsArray()
     @ValidateNested({ each: true })
     @Type(() => CreatePostMetaOptionsDto)
-    metaOptions: CreatePostMetaOptionsDto[]
+    metaOptions?: CreatePostMetaOptionsDto | null
+
+    @ApiProperty({
+        type: 'integer',
+        required: true,
+        example: 1,
+    })
+    @IsNotEmpty()
+    @IsInt()
+    authorId: number
 }
