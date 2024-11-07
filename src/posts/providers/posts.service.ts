@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { BadRequestException, Body, Injectable, RequestTimeoutException } from '@nestjs/common';
 import { UsersService } from 'src/users/providers/users.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { Repository } from 'typeorm';
@@ -43,10 +43,34 @@ export class PostsService {
     }
 
     public async update(patchPostDto: PatchPostDto) {
-        let tags = await this.tagsService.findMultipleTags(patchPostDto.tags)
-        let post = await this.postRepository.findOneBy({
-            id: patchPostDto.id
-        })
+        let tags = undefined
+        let post = undefined
+
+        try {
+            tags = await this.tagsService.findMultipleTags(patchPostDto.tags)
+        } catch (error) {
+            throw new RequestTimeoutException('Unable to process your request at the moment please try later')
+        }
+
+        if (!tags || tags.length !== patchPostDto.tags.length) {
+            throw new BadRequestException(
+                'Please check your tag Ids and ensure they are correct'
+            )
+        }
+
+
+        try {
+            post = await this.postRepository.findOneBy({
+                id: patchPostDto.id
+            })
+        } catch (error) {
+            throw new RequestTimeoutException('Unable to process your request at the moment please try later')
+        }
+
+        if (!post) {
+            throw new BadRequestException('The post ID does not exist')
+        }
+
 
         post.title = patchPostDto.title ?? post.title
         post.content = patchPostDto.content ?? post.content
@@ -58,7 +82,14 @@ export class PostsService {
 
         post.tags = tags
 
-        return await this.postRepository.save(post)
+        try {
+            return await this.postRepository.save(post)
+        } catch (error) {
+            throw new RequestTimeoutException(
+                'Unable to process your request at the moment please try later'
+            )
+        }
+        return post
     }
 
     public async delete(id: number) {
