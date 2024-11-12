@@ -4,12 +4,12 @@ Content-Type: application/json
 {
     "title": "Wha's new with NestJs", 
     "postType": "post",
-    "slug": "whats-new-with-nestjs-5",
+    "slug": "whats-new-with-nestjs-j",
     "status": "draft",
     "content": "NestJs is a great framework for building scalable and maintainable server-side applications. It provides a set of tools and features that make it easy to build robust and efficient applications. In this post, we'll explore some of the key features and benefits of NestJs and how it can help you build better applications.",
     "schema": "{\r\n \"@context\": \"https:\/\/schema.org\",\r\n \"@type\": \"Person\"\r\n}",
     "featuredImageUrl": "https://images.unsplash.com/photo-1593720219276-0b1eacd0aef4?q=80&w=2061&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "publishOn": "2024-03-16T07:46:32+0000",
+    //"publishOn": "2024-04-02T15:20:15.123Z",
     //"tags": ["nestjs", "javascript", "typescript"],
     "metaOptions": {
         "metaValue": "{\"sidebarEnabled\":true, \"footerActive\":true}"
